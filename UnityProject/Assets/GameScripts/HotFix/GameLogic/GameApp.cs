@@ -28,6 +28,7 @@ public partial class GameApp
     
     private static void StartGameLogic()
     {
+        GameModule.ECS.StartAsync().NoContext();
         GameEvent.Get<ILoginUI>().ShowLoginUI();
         GameModule.UI.ShowUIAsync<BattleMainUI>();
     }

@@ -22,7 +22,7 @@ namespace TEngine
         /// <summary>
         /// 当前运行时Id。
         /// </summary>
-        private static int _currentRuntimeId = 0;
+        private static int _currentRuntimeId = 1000;
 
         /// <summary>
         /// 字符串转RuntimeId。

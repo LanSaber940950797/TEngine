@@ -84,7 +84,16 @@ public class GameModule
     public static ILocalizationModule Localization => _localization ??= Get<ILocalizationModule>();
     
     private static ILocalizationModule _localization;
+    
+    /// <summary>
+    /// 获取ECS模块。
+    /// </summary>
+    public static IECSModule ECS => _ecs ??= Get<IECSModule>();
+    
+    private static IECSModule _ecs;
     #endregion
+    
+    
     
     /// <summary>
     /// 获取游戏框架模块类。

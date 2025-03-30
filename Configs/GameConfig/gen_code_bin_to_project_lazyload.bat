@@ -17,5 +17,6 @@ dotnet %LUBAN_DLL% ^
     --customTemplateDir %CONF_ROOT%\CustomTemplate\CustomTemplate_Client_LazyLoad ^
     -x outputCodeDir=%CODE_OUTPATH% ^
     -x outputDataDir=%DATA_OUTPATH% 
+python ./export_numeric.py %CODE_OUTPATH%
 pause
 

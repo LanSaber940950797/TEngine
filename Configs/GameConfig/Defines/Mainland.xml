@@ -1,0 +1,6 @@
+<module name="Mainland">
+    	<bean name="MonsterGroupOne" sep="," parent="">
+		<var name="monsterId" type="int"/>
+		<var name="featureId" type="int"/> 			
+	</bean>
+</module>
