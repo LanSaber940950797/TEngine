@@ -1,4 +1,5 @@
 ﻿using ET;
+using NativeCollection.UnsafeType;
 using TEngine;
 using UnityEngine;
 
@@ -10,6 +11,8 @@ namespace GameLogic.Battle
         public SpellAsset Asset;
         public long StartTime;
         public ETTask Tsc;
+        public ETCancellationToken CancelToken;
+        public readonly NativeCollection.MultiMap<long, long> timeId = new(100);
     }
     
     [EntitySystemOf(typeof(SpellClipComponent))]
@@ -56,6 +59,7 @@ namespace GameLogic.Battle
 
         public static async ETTask StartSpell(this SpellClipComponent self)
         {
+            self.FinishSpell();
             self.StartTime = TimeInfo.Instance.ClientFrameTime();
             using ListComponent<ETTask> list = ListComponent<ETTask>.Create();
             foreach (SpellClip clip in self.Children.Values)
@@ -63,9 +67,23 @@ namespace GameLogic.Battle
                 list.Add(clip.Start());
             }
 
-            self.Tsc = ETTaskHelper.WaitAll(list);
+            self.CancelToken = new ETCancellationToken();
+            self.Tsc = ETTaskHelper.WaitAll(list).AddCancel(self.CancelToken);
             await self.Tsc;
-            self.Tsc = null;
+            self.FinishSpell();
+        }
+
+        private static void FinishSpell(this SpellClipComponent self)
+        {
+            self.StartTime = 0;
+            self.timeId.Clear();
+            if (self.Tsc != null)
+            {
+                ETTask tsc = self.Tsc;
+                self.Tsc = null;
+                
+                tsc.SetResult();
+            }
         }
         
     }
