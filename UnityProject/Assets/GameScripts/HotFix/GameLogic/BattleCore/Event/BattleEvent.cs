@@ -15,5 +15,6 @@ namespace GameLogic.Battle
         //这个事件通知渲染层，有些actor是数据加载进来的，不走逻辑层ActorCreate
         public  const int ActorCreateView = 6;
         public  const int BattleEnd = 7;
+        public const int AllEvent = 8; //所有事件
     }
 }

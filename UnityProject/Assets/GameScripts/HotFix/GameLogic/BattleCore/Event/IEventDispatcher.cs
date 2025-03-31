@@ -28,7 +28,7 @@ namespace GameLogic.Battle
         ETTask Handle(Entity o, A a, B b, C c);
     }
     
-    public abstract class      AEventDispatcher<E> : IEventDispatcher,IEventDispatcherBase  where E : Entity 
+    public abstract class AEventDispatcher<E> : IEventDispatcher,IEventDispatcherBase  where E : Entity 
     {
         Type IEventDispatcherBase.ObserverType
         {
@@ -113,5 +113,31 @@ namespace GameLogic.Battle
                 Log.Error(e);
             }
         }
+    }
+
+    public interface IEventDispatcherMulParam 
+    {
+        ETTask Handle(Entity o, int eventId, params System.Object[] paramList);
+    }
+
+    public abstract class AEventDispatcherMulParam<E> : IEventDispatcherMulParam, IEventDispatcherBase where E : Entity
+    {
+        Type IEventDispatcherBase.ObserverType
+        {
+            get => typeof(E);
+        }
+        public async ETTask Handle(Entity o, int eventId, params object[] paramList)
+        {
+            try
+            {
+                await Run((E)o, eventId, paramList);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+            }
+        }
+
+        protected abstract ETTask Run(E observer,int eventId,params object[] paramList);
     }
 }

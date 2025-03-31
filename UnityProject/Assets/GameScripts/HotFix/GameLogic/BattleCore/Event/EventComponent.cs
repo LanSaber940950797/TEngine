@@ -58,5 +58,32 @@ namespace GameLogic.Battle
             queue?.Send(arg1, arg2, arg3);
         }
         
+        public static async ETTask SendEventAsync(this EventComponent self, int eventId)
+        {
+            var queue = self.GetChild<EventQueue>(eventId);
+            if(queue == null) return;
+            await queue.SendAsync();
+        }
+        
+        public static async ETTask SendEventAsync<TArg1>(this EventComponent self, int eventId, TArg1 arg)
+        {
+            var queue = self.GetChild<EventQueue>(eventId);
+            if(queue == null) return;
+            await queue.SendAsync(arg);
+        }
+        public static async ETTask SendEventAsync<TArg1, TArg2>(this EventComponent self, int eventId, TArg1 arg1, TArg2 arg2)
+        {
+            var queue = self.GetChild<EventQueue>(eventId);
+            if(queue == null) return;
+            await queue.SendAsync(arg1, arg2);
+        }
+        
+        public static async ETTask SendEventAsync<TArg1, TArg2,TArg3>(this EventComponent self, int eventId, TArg1 arg1, TArg2 arg2, TArg3 arg3)
+        {
+            var queue = self.GetChild<EventQueue>(eventId);
+            if(queue == null) return;
+            await queue.SendAsync(arg1, arg2, arg3);
+        }
+        
     }
 }

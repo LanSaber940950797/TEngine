@@ -25,10 +25,27 @@ namespace GameLogic.Battle
             self.GetComponent<EventComponent>()?.SendEvent(eventId, arg1, arg2, arg3);
         }
         
-        // public static void SendEvent<TArg1, TArg2, TArg3, TArg4>(this Entity self, int eventId, TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4)
-        // {
-        //     self.GetComponent<EventComponent>()?.EventDispatcher.SendEvent(eventId, arg1, arg2, arg3, arg4);
-        // }
+        public static async ETTask SendEventAsync(this Entity self, int eventId)
+        {
+            if (self != null) await  self.GetComponent<EventComponent>().SendEventAsync(eventId);
+        }
+        
+        public static async ETTask SendEventAsync<TArg1>(this Entity self, int eventId, TArg1 arg1)
+        {
+            if (self != null) await  self.GetComponent<EventComponent>().SendEventAsync(eventId, arg1);
+        }
+        
+        public static async ETTask SendEventAsync<TArg1, TArg2>(this Entity self, int eventId, TArg1 arg1, TArg2 arg2)
+        {
+            if (self != null) await  self.GetComponent<EventComponent>().SendEventAsync(eventId, arg1, arg2);
+        }
+        
+        public static async ETTask SendEventAsync<TArg1, TArg2, TArg3>(this Entity self, int eventId, TArg1 arg1, TArg2 arg2, TArg3 arg3)
+        {
+            if (self != null) await self.GetComponent<EventComponent>().SendEventAsync(eventId, arg1, arg2, arg3);
+        }
+        
+
 
         private static EventComponent GetOrCreateEventComponent(this Entity self)
         {

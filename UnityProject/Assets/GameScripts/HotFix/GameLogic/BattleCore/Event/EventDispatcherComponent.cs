@@ -43,7 +43,7 @@ namespace GameLogic.Battle
             }
         }
         
-        public void Run(Entity observer, int eventId)
+        public async ETTask Run(Entity observer, int eventId)
         {
             List<EventDispatcherInfo> list = allWatchers[observer.GetType()];
             if (list == null)
@@ -55,13 +55,21 @@ namespace GameLogic.Battle
             {
                 if (info.EventId == eventId && info.IEventDispatcher is IEventDispatcher dispatcher)
                 {
-                    dispatcher.Handle(observer);
+                    await dispatcher.Handle(observer);
+                    break;
+                }
+            }
+            foreach (var info in list)
+            {
+                if (info.EventId == BattleEvent.AllEvent && info.IEventDispatcher is IEventDispatcherMulParam mulParamDispatcher)
+                {
+                    await mulParamDispatcher.Handle(observer,eventId);
                     break;
                 }
             }
         }
         
-        public void Run<A>(Entity observer, int eventId, A a)
+        public async ETTask Run<A>(Entity observer, int eventId, A a)
         {
             List<EventDispatcherInfo> list = allWatchers[observer.GetType()];
             if (list == null)
@@ -71,15 +79,25 @@ namespace GameLogic.Battle
 
             foreach (var info in list)
             {
+               
                 if (info.EventId == eventId && info.IEventDispatcher is IEventDispatcher<A> dispatcher)
                 {
-                    dispatcher.Handle(observer, a);
+                    await dispatcher.Handle(observer, a);
+                    break;
+                }
+            }
+            
+            foreach (var info in list)
+            {
+                if (info.EventId == BattleEvent.AllEvent && info.IEventDispatcher is IEventDispatcherMulParam mulParamDispatcher)
+                {
+                    await mulParamDispatcher.Handle(observer,eventId, a);
                     break;
                 }
             }
         }
         
-        public void Run<A, B>(Entity observer, int eventId, A a, B b)
+        public async ETTask Run<A, B>(Entity observer, int eventId, A a, B b)
         {
             List<EventDispatcherInfo> list = allWatchers[observer.GetType()];
             if (list == null)
@@ -91,13 +109,22 @@ namespace GameLogic.Battle
             {
                 if (info.EventId == eventId && info.IEventDispatcher is IEventDispatcher<A, B> dispatcher)
                 {
-                    dispatcher.Handle(observer, a, b);
+                    await dispatcher.Handle(observer, a, b);
+                    break;
+                }
+            }
+            
+            foreach (var info in list)
+            {
+                if (info.EventId == BattleEvent.AllEvent && info.IEventDispatcher is IEventDispatcherMulParam mulParamDispatcher)
+                {
+                    await mulParamDispatcher.Handle(observer,eventId, a, b);
                     break;
                 }
             }
         }
         
-        public void Run<A, B, C>(Entity observer, int eventId, A a, B b, C c)
+        public async ETTask Run<A, B, C>(Entity observer, int eventId, A a, B b, C c)
         {
             List<EventDispatcherInfo> list = allWatchers[observer.GetType()];
             if (list == null)
@@ -109,7 +136,16 @@ namespace GameLogic.Battle
             {
                 if (info.EventId == eventId && info.IEventDispatcher is IEventDispatcher<A, B, C> dispatcher)
                 {
-                    dispatcher.Handle(observer, a, b, c);
+                     await dispatcher.Handle(observer, a, b, c);
+                    break;
+                }
+            }
+            
+            foreach (var info in list)
+            {
+                if (info.EventId == BattleEvent.AllEvent && info.IEventDispatcher is IEventDispatcherMulParam mulParamDispatcher)
+                {
+                    await mulParamDispatcher.Handle(observer, eventId, a, b, c);
                     break;
                 }
             }
