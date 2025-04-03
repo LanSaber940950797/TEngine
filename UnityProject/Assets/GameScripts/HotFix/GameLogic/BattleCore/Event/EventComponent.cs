@@ -8,8 +8,7 @@ namespace GameLogic.Battle
     [ComponentOf]
     public class EventComponent : Entity, IAwake,IDestroy
     {
-        //观察者
-        public Dictionary<int, List<EntityRef<Entity>>> ObserverMap = new Dictionary<int, List<EntityRef<Entity>>>();
+        
     }
     
     [EntitySystemOf((typeof(EventComponent)))]
@@ -25,6 +24,7 @@ namespace GameLogic.Battle
         public static void AddListener(this EventComponent self, int eventId, Entity owner)
         {
             EventQueue queue = self.GetChild<EventQueue>(eventId) ?? self.AddChildWithId<EventQueue>(eventId, true);
+            queue.AddEventListener(eventId, owner);
         }
 
         public static void RemoveListener(this EventComponent self, int eventId, Entity owner)

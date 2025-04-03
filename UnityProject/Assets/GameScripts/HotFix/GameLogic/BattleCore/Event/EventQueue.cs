@@ -20,7 +20,7 @@ namespace GameLogic.Battle
         }
         public static void New(this EventQueue self, Entity owner)
         {
-            self.AddChildWithId<Observer, Entity>(owner.InstanceId, owner);
+            self.AddChildWithId<Observer, Entity>(owner.InstanceId, owner, true);
         }
 
         public static void Remove(this EventQueue self, Entity owner)

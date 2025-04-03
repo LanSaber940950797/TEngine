@@ -1,5 +1,6 @@
-﻿using ET;
-using NativeCollection.UnsafeType;
+﻿using System.Collections.Generic;
+using ET;
+
 using TEngine;
 using UnityEngine;
 
@@ -9,17 +10,21 @@ namespace GameLogic.Battle
     public class SpellClipComponent : Entity, IAwake<string>
     {
         public SpellAsset Asset;
-        public long StartTime;
-        public ETTask Tsc;
-        public ETCancellationToken CancelToken;
-        public readonly NativeCollection.MultiMap<long, long> timeId = new(100);
+        public List<SpellClipData> ClipDatas = new List<SpellClipData>();
+
+        public SpellClipComponent(List<SpellClipData> clipDatas)
+        {
+            ClipDatas = clipDatas;
+        }
     }
     
     [EntitySystemOf(typeof(SpellClipComponent))]
     public static partial class SpellClipComponentSystem
     {
+        [EntitySystem]
         public static void Awake(this SpellClipComponent self, string assetName)
         {
+            self.ClipDatas.Clear();
             var asset = GameModule.Resource.LoadAsset<TextAsset>(assetName);
             self.Asset = Utility.Json.ToObject<SpellAsset>(asset.text);
             self.Init();
@@ -49,7 +54,7 @@ namespace GameLogic.Battle
 
                         if (clip is SpellClipData spellClipData)
                         {
-                            self.AddChild<SpellClip, SpellClipData>(spellClipData);
+                            self.ClipDatas.Add(spellClipData);
                         }
                     }
                 }
@@ -57,33 +62,15 @@ namespace GameLogic.Battle
         }
 
 
-        public static async ETTask StartSpell(this SpellClipComponent self)
+        public static List<SpellClipData> GetClips(this SpellClipComponent self)
         {
-            self.FinishSpell();
-            self.StartTime = TimeInfo.Instance.ClientFrameTime();
-            using ListComponent<ETTask> list = ListComponent<ETTask>.Create();
-            foreach (SpellClip clip in self.Children.Values)
-            {
-                list.Add(clip.Start());
-            }
-
-            self.CancelToken = new ETCancellationToken();
-            self.Tsc = ETTaskHelper.WaitAll(list).AddCancel(self.CancelToken);
-            await self.Tsc;
-            self.FinishSpell();
+            return self.ClipDatas;
         }
 
-        private static void FinishSpell(this SpellClipComponent self)
+        public static long TotalTime(this SpellClipComponent self)
         {
-            self.StartTime = 0;
-            self.timeId.Clear();
-            if (self.Tsc != null)
-            {
-                ETTask tsc = self.Tsc;
-                self.Tsc = null;
-                
-                tsc.SetResult();
-            }
+            long time = (long)(self.Asset.Length * 1000);
+            return time;
         }
         
     }

@@ -21,8 +21,7 @@ namespace GameLogic.Battle
         
 
         public SpellCastParam SpellCastParam;
-        public ETTask Tsc;
-
+        public ETCancellationToken Cancel;
     }
     
     [EntitySystemOf(typeof(SpellAction))]
@@ -31,56 +30,63 @@ namespace GameLogic.Battle
     {
 
         [EntitySystem]
+        public static void Awake(this SpellAction self)
+        {
+            
+        }
+
+        [EntitySystem]
         public static void Destroy(this SpellAction self)
         {
+            if (self.Cancel != null)
+            {
+                self.Cancel.Cancel();
+                self.Cancel = null;
+            }
             self.Creator = null;
             self.Target = null;
+            self.Spell = null;
             
-            self.Tsc = null;
         }
         
         
-        private static void PreProcess(this SpellAction self)
-        {
-            //self.Creator.TriggerActionPoint(ActionPointType.PreSpell, self);
-        }
-        
-        private static void SpellSkill(this SpellAction self)
-        {
-           
-            // self.SkillExecute = self.SkillAbility.CreateExecution();
-            // if (self.SkillExecute == null)
-            // {
-            //     self.FinishAction();
-            //     return;
-            // }
-            // self.SkillExecute.ViewName = self.SkillAbility.ViewName;
-            // if (self.SkillTargets.Count > 0)
-            // {
-            //     self.SkillExecute.SkillTargets.AddRange(self.SkillTargets);
-            // }
-            // self.SkillExecute.SpellCastParam = self.SpellCastParam;
-            // self.SkillExecute.BeginExecute();
-        }
-        
-
-
-        //后置处理
-        private static void PostProcess(this SpellAction self)
-        {
-            //self.Creator.TriggerActionPoint(ActionPointType.PostSpell, self);
-        }
 
         public static async ETTask DoAction(this SpellAction self)
         {
-            self.Tsc = ETTask.Create();
-            self.PreProcess();
-            self.SpellSkill();
-            await self.Tsc;
+            await self.PreDoAction();
+            await self.DoActionInner();
+            await self.PostDoAction();
         }
 
+        private static async ETTask PreDoAction(this SpellAction self)
+        {
+            await ETTask.CompletedTask;
+        }
+        private static async ETTask PostDoAction(this SpellAction self)
+        {
+            await ETTask.CompletedTask;
+        }
+        private static async ETTask DoActionInner(this SpellAction self)
+        {
+            var clips = self.Spell.GetComponent<SpellClipComponent>().GetClips();
+            foreach (var clip in clips)
+            {
+                if (clip.ClipTriggerType == ClipTriggerType.Time)
+                {
+                    self.AddChild<ClipTimeTrigger, SpellClipData>(clip, true);
+                }
+                else if(clip.ClipTriggerType == ClipTriggerType.ClipEvent)
+                {
+                    self.AddChild<ClipEventTrigger, SpellClipData>(clip, true);
+                }
+            }
 
-
+            var time = self.Spell.GetComponent<SpellClipComponent>().TotalTime();
+            self.Cancel = new ETCancellationToken();
+            await self.Root().GetComponent<TimerComponent>().WaitAsync(time, self.Cancel);
+            self.Cancel = null;
+            await ETTask.CompletedTask;
+        }
 
        
     }

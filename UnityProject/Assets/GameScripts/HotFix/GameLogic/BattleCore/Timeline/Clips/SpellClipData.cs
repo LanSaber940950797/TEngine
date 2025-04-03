@@ -1,4 +1,5 @@
 ﻿using System;
+using ET;
 using NBC.ActionEditor;
 
 namespace GameLogic.Battle
@@ -11,6 +12,6 @@ namespace GameLogic.Battle
         [MenuName("触发事件")] [OptionParam(typeof(SpellClipEvent))]
         public int Event;
 
-        public abstract Type ClipType();
+        public abstract void AttachClip(Entity root);
     }
 }

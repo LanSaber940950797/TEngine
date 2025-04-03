@@ -52,7 +52,7 @@ namespace GameLogic.Battle
             var componet = self.GetComponent<EventComponent>();
             if(componet == null)
             {
-                componet = self.AddComponent<EventComponent>();
+                componet = self.AddComponent<EventComponent>(true);
             }
 
             return componet;
@@ -62,7 +62,10 @@ namespace GameLogic.Battle
             self.GetOrCreateEventComponent().AddListener(eventId,  owner);
         }
         
-        
+        public static void RemoveEventListener(this Entity self, int eventId,  Entity owner)
+        {
+            self.GetOrCreateEventComponent().RemoveListener(eventId,  owner);
+        }
 
     }
 }
