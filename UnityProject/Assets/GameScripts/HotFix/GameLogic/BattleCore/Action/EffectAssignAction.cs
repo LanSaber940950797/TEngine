@@ -21,9 +21,7 @@ namespace GameLogic.Battle
 
         public AbilityEffect AbilityEffect;
         public Actor AssignTarget;
-        public List<Actor> Targets;
-
-
+       
     }
 
     

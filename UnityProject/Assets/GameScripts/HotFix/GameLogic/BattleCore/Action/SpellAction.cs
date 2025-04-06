@@ -48,6 +48,7 @@ namespace GameLogic.Battle
         public static async ETTask DoAction(this SpellAction self)
         {
             await self.PreProcess();
+            if(self.IsDisposed) return; //被打断了
             await self.DoActionInner();
             await self.PostProcess();
             self.Dispose();
@@ -55,10 +56,12 @@ namespace GameLogic.Battle
 
         private static async ETTask PreProcess(this SpellAction self)
         {
+            await self.Creator.SendEventAsync(ActionEvent.PreSpell, self);
             await ETTask.CompletedTask;
         }
         private static async ETTask PostProcess(this SpellAction self)
         {
+            await self.Creator.SendEventAsync(ActionEvent.PostSpell, self);
             await ETTask.CompletedTask;
         }
         private static async ETTask DoActionInner(this SpellAction self)

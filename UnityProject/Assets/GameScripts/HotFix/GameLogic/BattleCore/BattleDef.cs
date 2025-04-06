@@ -59,14 +59,17 @@ namespace GameLogic.Battle
         Rooted = 1, //定身，不能移动，可以正常释放技能和普通攻击
         Disarm = 1<<1,//缴械，不能普通攻击，可以释放技能
         Slienced = 1<<2, //沉默，不能放技能，可以移动和普攻
-        TimeFrozen = 1<<3, //时间暂停，身上的计时器也会暂停
         DamageImmune = 1<<4, //伤害免疫
         Unselectable = 1<<5, //不可选中
-        ControlImmune = 1<<6, //控制免疫
-        StrongControlImmune = 1 << 7,//强控免疫
-
+        ControlImmune = 1<<6, //控制免疫，免疫减速这种
+        StrongControlImmune = 1 << 7,//强控免疫 免疫控制状态
+        Invincible = DamageImmune | ControlImmune | StrongControlImmune, //无敌
         Stunned = Rooted | Disarm | Slienced, //不能控制（不能移动、不能释放任何技能包括普通攻击）
         AllSlienced = Disarm|Slienced, //全沉默，不能放技能以及普攻，可以移动
+        
+        ControlStatus = Rooted | Disarm | Slienced, //控制状态
+        NegativeStatus = ControlStatus , //负面状态
+        
     }
     
     [Flags]

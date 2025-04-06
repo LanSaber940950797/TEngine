@@ -17,15 +17,8 @@ namespace GameLogic.Battle
             self.Actor = actor;
             self.DeathTime = 0.5f;
             self.AddComponent<ViewComponent, Entity, string>(self.Actor, null);
-            self.SendActorCreateViewEvent().NoContext();
         }
 
-        private static async ETTask SendActorCreateViewEvent(this ActorView self)
-        {
-            //下一帧再发出事件，让逻辑层先加载
-            await self.Root().GetComponent<TimerComponent>().WaitFrameAsync();
-            self.Scene().SendEvent(BattleEvent.ActorCreateView, self);
-        }
 
        
 

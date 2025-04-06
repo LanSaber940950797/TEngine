@@ -18,9 +18,8 @@ namespace GameLogic.Battle
     {
         
         public Dictionary<int, long> NumericDic = new Dictionary<int, long>();
-        [MemoryPackIgnore]
-        [BsonIgnore]
-        public ActorEventDispatcher Event;
+       
+      
         public long this[int numericType]
         {
             get
@@ -35,13 +34,33 @@ namespace GameLogic.Battle
     }
     
     [EntitySystemOf(typeof(ActorNumericComponent))]
-    public  static partial class LSNumericComponentSystem
+    public  static partial class ActorNumericComponentSystem
     {
         [EntitySystem]
         public static void Awake(this ActorNumericComponent self)
         {
             self.NumericDic.Clear();
         }
+        
+        #region 订阅事件
+        public static void OnNumericUpdate(this Actor self, int numericType, Entity owner)
+        {
+            self.GetComponent<ActorNumericComponent>()?.AddEventListener(numericType, owner);
+        }
+
+        public static void OffNumericUpdate(this Actor self, int numericType, Entity owner)
+        {
+            self.GetComponent<ActorNumericComponent>()?.RemoveEventListener(numericType, owner);
+        }
+
+        
+
+
+
+        
+
+
+        #endregion
 
 
         //浮点数精度
@@ -112,15 +131,14 @@ namespace GameLogic.Battle
 
             if (isPublicEvent)
             {
-                EventSystem.Instance.Publish(self.Scene(),
-                    new  ActorNumbericChange()
-                    {
-                        Actor = self.GetParent<Actor>(), 
-                        New = value, 
-                        Old = oldValue, 
-                        NumericType = numericType
-                    });
-                //self.Event.SendEvent(numericType, numericType, oldValue, value);
+                ActorNumbericChange change = new ActorNumbericChange()
+                {
+                    Actor = self.GetParent<Actor>(),
+                    New = value,
+                    Old = oldValue,
+                    NumericType = numericType
+                };
+                self.SendEvent(numericType, change);
             }
         }
 
@@ -133,7 +151,7 @@ namespace GameLogic.Battle
 
         public static void Update(this ActorNumericComponent self, int numericType, bool isPublicEvent)
         {
-            int final = (int)numericType / 10;
+            int final = numericType / 10;
             int bas = final * 10 + 1;
             int add = final * 10 + 2;
             int pct = final * 10 + 3;

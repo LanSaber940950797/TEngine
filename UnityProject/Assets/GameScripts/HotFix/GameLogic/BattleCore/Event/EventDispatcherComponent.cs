@@ -7,12 +7,12 @@ namespace GameLogic.Battle
     public struct EventDispatcherInfo
     {
         public int EventId { get; }
-        public IEventDispatcherBase IEventDispatcher { get; }
+        public IEventDispatcherBase EventDispatcher { get; }
 
         public EventDispatcherInfo(int eventId, IEventDispatcherBase dispatcher)
         {
             this.EventId = eventId;
-            this.IEventDispatcher = dispatcher;
+            this.EventDispatcher = dispatcher;
         }
     }
     
@@ -53,7 +53,7 @@ namespace GameLogic.Battle
 
             foreach (var info in list)
             {
-                if (info.EventId == eventId && info.IEventDispatcher is IEventDispatcher dispatcher)
+                if (info.EventId == eventId && info.EventDispatcher is IEventDispatcher dispatcher)
                 {
                     await dispatcher.Handle(observer);
                     break;
@@ -61,7 +61,7 @@ namespace GameLogic.Battle
             }
             foreach (var info in list)
             {
-                if (info.EventId == BattleEvent.AllEvent && info.IEventDispatcher is IEventDispatcherMulParam mulParamDispatcher)
+                if (info.EventId == BattleEvent.AllEvent && info.EventDispatcher is IEventDispatcherMulParam mulParamDispatcher)
                 {
                     await mulParamDispatcher.Handle(observer,eventId);
                     break;
@@ -80,7 +80,7 @@ namespace GameLogic.Battle
             foreach (var info in list)
             {
                
-                if (info.EventId == eventId && info.IEventDispatcher is IEventDispatcher<A> dispatcher)
+                if (info.EventId == eventId && info.EventDispatcher is IEventDispatcher<A> dispatcher)
                 {
                     await dispatcher.Handle(observer, a);
                     break;
@@ -89,7 +89,7 @@ namespace GameLogic.Battle
             
             foreach (var info in list)
             {
-                if (info.EventId == BattleEvent.AllEvent && info.IEventDispatcher is IEventDispatcherMulParam mulParamDispatcher)
+                if (info.EventId == BattleEvent.AllEvent && info.EventDispatcher is IEventDispatcherMulParam mulParamDispatcher)
                 {
                     await mulParamDispatcher.Handle(observer,eventId, a);
                     break;
@@ -107,7 +107,7 @@ namespace GameLogic.Battle
 
             foreach (var info in list)
             {
-                if (info.EventId == eventId && info.IEventDispatcher is IEventDispatcher<A, B> dispatcher)
+                if (info.EventId == eventId && info.EventDispatcher is IEventDispatcher<A, B> dispatcher)
                 {
                     await dispatcher.Handle(observer, a, b);
                     break;
@@ -116,7 +116,7 @@ namespace GameLogic.Battle
             
             foreach (var info in list)
             {
-                if (info.EventId == BattleEvent.AllEvent && info.IEventDispatcher is IEventDispatcherMulParam mulParamDispatcher)
+                if (info.EventId == BattleEvent.AllEvent && info.EventDispatcher is IEventDispatcherMulParam mulParamDispatcher)
                 {
                     await mulParamDispatcher.Handle(observer,eventId, a, b);
                     break;
@@ -134,7 +134,7 @@ namespace GameLogic.Battle
 
             foreach (var info in list)
             {
-                if (info.EventId == eventId && info.IEventDispatcher is IEventDispatcher<A, B, C> dispatcher)
+                if (info.EventId == eventId && info.EventDispatcher is IEventDispatcher<A, B, C> dispatcher)
                 {
                      await dispatcher.Handle(observer, a, b, c);
                     break;
@@ -143,7 +143,7 @@ namespace GameLogic.Battle
             
             foreach (var info in list)
             {
-                if (info.EventId == BattleEvent.AllEvent && info.IEventDispatcher is IEventDispatcherMulParam mulParamDispatcher)
+                if (info.EventId == BattleEvent.AllEvent && info.EventDispatcher is IEventDispatcherMulParam mulParamDispatcher)
                 {
                     await mulParamDispatcher.Handle(observer, eventId, a, b, c);
                     break;

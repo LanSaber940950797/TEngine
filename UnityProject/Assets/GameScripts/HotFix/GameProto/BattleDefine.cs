@@ -16,8 +16,13 @@ namespace GameLogic.Battle
         public const string SkillTreeFolder = "Assets/AssetRaw/BattleConfig/Skill/";
         
     }
-   
-
+    
+    public enum DamageType
+    {
+        Physic = 0, //物理伤害
+        Magic = 1, //魔法伤害
+        Real = 2, //真实伤害
+    }
 
     [Flags]
     public enum ERoleType
