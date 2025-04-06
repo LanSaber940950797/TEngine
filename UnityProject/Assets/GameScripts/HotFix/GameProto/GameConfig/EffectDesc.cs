@@ -18,8 +18,10 @@ public sealed partial class EffectDesc : Luban.BeanBase
     {
         Id = _buf.ReadInt();
         Level = _buf.ReadInt();
+        Index = _buf.ReadInt();
         Name = _buf.ReadString();
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);Effects = new System.Collections.Generic.List<Battle.Effect>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { Battle.Effect _e0;  _e0 = Battle.Effect.DeserializeEffect(_buf); Effects.Add(_e0);}}
+        Trigger = Battle.EffectTriggerDesc.DeserializeEffectTriggerDesc(_buf);
+        Effect = Battle.Effect.DeserializeEffect(_buf);
     }
 
     public static EffectDesc DeserializeEffectDesc(ByteBuf _buf)
@@ -35,14 +37,13 @@ public sealed partial class EffectDesc : Luban.BeanBase
     /// 等级
     /// </summary>
     public readonly int Level;
+    public readonly int Index;
     /// <summary>
     /// 名字
     /// </summary>
     public readonly string Name;
-    /// <summary>
-    /// 效果类型
-    /// </summary>
-    public readonly System.Collections.Generic.List<Battle.Effect> Effects;
+    public readonly Battle.EffectTriggerDesc Trigger;
+    public readonly Battle.Effect Effect;
    
     public const int __ID__ = -586164254;
     public override int GetTypeId() => __ID__;
@@ -52,7 +53,9 @@ public sealed partial class EffectDesc : Luban.BeanBase
         
         
         
-        foreach (var _e in Effects) { _e?.ResolveRef(tables); }
+        
+        Trigger?.ResolveRef(tables);
+        Effect?.ResolveRef(tables);
     }
 
     public override string ToString()
@@ -60,8 +63,10 @@ public sealed partial class EffectDesc : Luban.BeanBase
         return "{ "
         + "id:" + Id + ","
         + "level:" + Level + ","
+        + "index:" + Index + ","
         + "name:" + Name + ","
-        + "effects:" + Luban.StringUtil.CollectionToString(Effects) + ","
+        + "trigger:" + Trigger + ","
+        + "effect:" + Effect + ","
         + "}";
     }
 }

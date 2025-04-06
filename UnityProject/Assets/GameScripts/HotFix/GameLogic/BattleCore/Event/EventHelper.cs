@@ -25,24 +25,29 @@ namespace GameLogic.Battle
             self.GetComponent<EventComponent>()?.SendEvent(eventId, arg1, arg2, arg3);
         }
         
+        //发送事件异步，事件尽量少异步
         public static async ETTask SendEventAsync(this Entity self, int eventId)
         {
-            if (self != null) await  self.GetComponent<EventComponent>().SendEventAsync(eventId);
+            var eventComponent = self?.GetComponent<EventComponent>();
+            if (eventComponent != null) await  eventComponent.SendEventAsync(eventId);
         }
         
         public static async ETTask SendEventAsync<TArg1>(this Entity self, int eventId, TArg1 arg1)
         {
-            if (self != null) await  self.GetComponent<EventComponent>().SendEventAsync(eventId, arg1);
+            var eventComponent = self?.GetComponent<EventComponent>();
+            if (eventComponent != null) await  eventComponent.SendEventAsync(eventId, arg1);
         }
         
         public static async ETTask SendEventAsync<TArg1, TArg2>(this Entity self, int eventId, TArg1 arg1, TArg2 arg2)
         {
-            if (self != null) await  self.GetComponent<EventComponent>().SendEventAsync(eventId, arg1, arg2);
+            var eventComponent = self?.GetComponent<EventComponent>();
+            if (eventComponent != null) await  eventComponent.SendEventAsync(eventId, arg1, arg2);
         }
         
         public static async ETTask SendEventAsync<TArg1, TArg2, TArg3>(this Entity self, int eventId, TArg1 arg1, TArg2 arg2, TArg3 arg3)
         {
-            if (self != null) await self.GetComponent<EventComponent>().SendEventAsync(eventId, arg1, arg2, arg3);
+            var eventComponent = self?.GetComponent<EventComponent>();
+            if (eventComponent != null) await  eventComponent.SendEventAsync(eventId, arg1, arg2, arg3);
         }
         
 
@@ -64,7 +69,7 @@ namespace GameLogic.Battle
         
         public static void RemoveEventListener(this Entity self, int eventId,  Entity owner)
         {
-            self.GetOrCreateEventComponent().RemoveListener(eventId,  owner);
+            self?.GetComponent<EventComponent>()?.RemoveListener(eventId,  owner);
         }
 
     }

@@ -2,20 +2,36 @@
 
 namespace GameLogic.Battle
 {
+    public enum BattleWorldType
+    {
+        TwoDimensional,
+        ThreeDimensional
+    }
+
+    public static class BattleConstValue
+    {
+        public static BattleWorldType WorldType = BattleWorldType.TwoDimensional;
+        public static bool IsStateSync = true;
+    }
+
     // 角色类型
+    [Flags]
     public enum ActorType
     {
         None = 0,
-        Player = 1, //玩家
-        Monster = 2,//怪物
-        MagicField = 3,//法术场
-        Bullet = 4, //子弹
-        System = 5, //系统actor，管理战斗的
-        Hero = 6, //英雄
+        Hero = 1,
+        Monster = 1 << 1,//怪物
+        MagicField = 1 << 2,//法术场
+        Bullet = 1 << 3, //子弹
+        System = 1 << 4, //系统actor，管理战斗的
+        CanSelect = Hero | Monster,
+        All = int.MaxValue,
     }
 
+    [Flags]
     public enum SideType
     {
+        None = 0,
         SideA = 1, //阵营A
         SideB = 2, //阵容B
         Neutral = 3, //中立

@@ -13,8 +13,9 @@ namespace GameLogic
             //SceneType sceneType = EnumHelper.FromString<SceneType>(globalComponent.GlobalConfig.AppType.ToString());
             root.SceneType = SceneType.Client;
             GameModule.ECS.Root = root;
+            root.AddComponent<CurrentScenesComponent>();
             await EventSystem.Instance.PublishAsync(root, new AppStartInitFinish());
-            //await GameHelper.StartGame();
+            await GameHelper.StartGame();
             //TopDownHelper.StartGame();
             //CardGameHelper.StartGame().Forget();
         }

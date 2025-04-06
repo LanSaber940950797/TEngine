@@ -26,6 +26,10 @@ namespace GameLogic.Battle
         public static void Remove(this EventQueue self, Entity owner)
         {
             self.RemoveChild(owner.InstanceId);
+            if (self.ChildrenCount() == 0)
+            {
+                self.Dispose();
+            }
         }
         
         public static void Send(this EventQueue self)

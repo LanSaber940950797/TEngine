@@ -36,8 +36,8 @@ public partial class TbSpell
     public System.Collections.Generic.List<SpellDesc> DataList => _dataList;
 
     public SpellDesc GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
-    public SpellDesc Get(int key) => _dataMap[key];
-    public SpellDesc this[int key] => _dataMap[key];
+    public SpellDesc Get(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
+    public SpellDesc this[int key] => _dataMap.TryGetValue(key, out var v) ? v : null;
 
     public void ResolveRef(Tables tables)
     {

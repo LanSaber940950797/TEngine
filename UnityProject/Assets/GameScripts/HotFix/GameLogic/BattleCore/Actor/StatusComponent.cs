@@ -4,7 +4,7 @@ using ET;
 namespace GameLogic.Battle
 {
     [ComponentOf(typeof(Actor))]
-    public class StatusComponent : Entity
+    public class StatusComponent : Entity,IAwake
     {
         public StatusFlag Status = StatusFlag.None;
         public List<int> FlagBitArray = new List<int>();

@@ -51,6 +51,24 @@ public partial class Tables
             m_TbEffect.ResolveRef(this);
         }
     }
+    private TbBuff m_TbBuff;
+    public TbBuff TbBuff 
+    {
+        get
+        {
+            if (m_TbBuff == null)
+            {
+                m_TbBuff = new TbBuff(defaultLoader("tbbuff"));
+                m_TbBuff.ResolveRef(this);
+            }
+            return m_TbBuff;
+        }
+        set
+        {
+            m_TbBuff = value;
+            m_TbBuff.ResolveRef(this);
+        }
+    }
 
     #endregion
 

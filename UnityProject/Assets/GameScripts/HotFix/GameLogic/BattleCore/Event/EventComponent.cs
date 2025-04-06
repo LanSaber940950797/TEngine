@@ -34,6 +34,11 @@ namespace GameLogic.Battle
             {
                 queue.Remove(owner);
             }
+
+            if (self.ChildrenCount() == 0)
+            {
+                self.Dispose();
+            }
         }
         public static void SendEvent(this EventComponent self, int eventId)
         {

@@ -17,7 +17,9 @@ public partial class TbEffect
     public static TbEffect Instance => ConfigSystem.Instance.Tables.TbEffect;
     private readonly System.Collections.Generic.List<EffectDesc> _dataList;
 
-    private System.Collections.Generic.Dictionary<(int, int), EffectDesc> _dataMapUnion;
+    private System.Collections.Generic.Dictionary<(int, int, int), EffectDesc> _dataMapUnion;
+    private readonly System.Collections.Generic.SortedDictionary<int, System.Collections.Generic.SortedDictionary<int, System.Collections.Generic.SortedDictionary<int, EffectDesc>>> _dataMapList;
+    public System.Collections.Generic.SortedDictionary<int, System.Collections.Generic.SortedDictionary<int, System.Collections.Generic.SortedDictionary<int, EffectDesc>>> DataMapList => _dataMapList;
 
     public TbEffect(ByteBuf _buf)
     {
@@ -29,16 +31,48 @@ public partial class TbEffect
             _v = EffectDesc.DeserializeEffectDesc(_buf);
             _dataList.Add(_v);
         }
-        _dataMapUnion = new System.Collections.Generic.Dictionary<(int, int), EffectDesc>();
+        _dataMapUnion = new System.Collections.Generic.Dictionary<(int, int, int), EffectDesc>();
+        _dataMapList = new System.Collections.Generic.SortedDictionary<int, System.Collections.Generic.SortedDictionary<int, System.Collections.Generic.SortedDictionary<int, EffectDesc>>>();
         foreach(var _v in _dataList)
         {
-            _dataMapUnion.Add((_v.Id, _v.Level), _v);
+            _dataMapUnion.Add((_v.Id, _v.Level, _v.Index), _v);
+
+            var lastMap_id = _dataMapList;
+            if (!lastMap_id.ContainsKey(_v.Id))
+            {
+                lastMap_id.Add(_v.Id, new ());
+            }
+            var lastMap_level = lastMap_id[_v.Id];
+            if (!lastMap_level.ContainsKey(_v.Level))
+            {
+                lastMap_level.Add(_v.Level, new ());
+            }
+            var lastMap_index = lastMap_level[_v.Level];
+            lastMap_index.Add(_v.Index, _v);
         }
+
     }
 
     public System.Collections.Generic.List<EffectDesc> DataList => _dataList;
 
-    public EffectDesc Get(int id, int level) => _dataMapUnion.TryGetValue((id, level), out EffectDesc __v) ? __v : null;
+    public EffectDesc Get(int id, int level, int index) => _dataMapUnion.TryGetValue((id, level, index), out EffectDesc __v) ? __v : null;
+    
+    public System.Collections.Generic.SortedDictionary<int, System.Collections.Generic.SortedDictionary<int, EffectDesc>> Get1Key(int id){
+        var map = _dataMapList;
+        return map.TryGetValue(id, out var __v) ? __v : null;
+    }
+    public System.Collections.Generic.SortedDictionary<int, EffectDesc> Get2Key(int id, int level){
+        var map = Get1Key(id);
+		if (map == null)
+			return null;
+        return map.TryGetValue(level, out var __v) ? __v : null;
+    }
+    public EffectDesc Get3Key(int id, int level, int index){
+        var map = Get2Key(id, level);
+		if (map == null)
+			return null;
+        return map.TryGetValue(index, out var __v) ? __v : null;
+    }
     
     public void ResolveRef(Tables tables)
     {

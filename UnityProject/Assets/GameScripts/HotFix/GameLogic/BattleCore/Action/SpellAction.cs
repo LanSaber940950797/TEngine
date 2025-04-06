@@ -10,18 +10,16 @@ namespace GameLogic.Battle
         public Actor Creator { get; set; }
        
         public Actor Target { get; set; }
+        public IAction SourceAction { get; set; }
 
 
-
-        public Spell Spell { get; set; }
+        public Skill Skill { get; set; }
         
-        //public SkillExecute SkillExecute { get; set; }
+        public SkillExecute SkillExecute { get; set; }
        
         //public List<EntityRef<Actor>> SkillTargets { get; set; } = new List<EntityRef<Actor>>();
         
-
         public SpellCastParam SpellCastParam;
-        public ETCancellationToken Cancel;
     }
     
     [EntitySystemOf(typeof(SpellAction))]
@@ -38,14 +36,10 @@ namespace GameLogic.Battle
         [EntitySystem]
         public static void Destroy(this SpellAction self)
         {
-            if (self.Cancel != null)
-            {
-                self.Cancel.Cancel();
-                self.Cancel = null;
-            }
+           
             self.Creator = null;
             self.Target = null;
-            self.Spell = null;
+            self.Skill = null;
             
         }
         
@@ -53,39 +47,30 @@ namespace GameLogic.Battle
 
         public static async ETTask DoAction(this SpellAction self)
         {
-            await self.PreDoAction();
+            await self.PreProcess();
             await self.DoActionInner();
-            await self.PostDoAction();
+            await self.PostProcess();
+            self.Dispose();
         }
 
-        private static async ETTask PreDoAction(this SpellAction self)
+        private static async ETTask PreProcess(this SpellAction self)
         {
             await ETTask.CompletedTask;
         }
-        private static async ETTask PostDoAction(this SpellAction self)
+        private static async ETTask PostProcess(this SpellAction self)
         {
             await ETTask.CompletedTask;
         }
         private static async ETTask DoActionInner(this SpellAction self)
         {
-            var clips = self.Spell.GetComponent<SpellClipComponent>().GetClips();
-            foreach (var clip in clips)
+            self.SkillExecute = self.Skill.CreateExecution();
+            if (self.SkillExecute == null)
             {
-                if (clip.ClipTriggerType == ClipTriggerType.Time)
-                {
-                    self.AddChild<ClipTimeTrigger, SpellClipData>(clip, true);
-                }
-                else if(clip.ClipTriggerType == ClipTriggerType.ClipEvent)
-                {
-                    self.AddChild<ClipEventTrigger, SpellClipData>(clip, true);
-                }
+                return;
             }
-
-            var time = self.Spell.GetComponent<SpellClipComponent>().TotalTime();
-            self.Cancel = new ETCancellationToken();
-            await self.Root().GetComponent<TimerComponent>().WaitAsync(time, self.Cancel);
-            self.Cancel = null;
-            await ETTask.CompletedTask;
+            
+            self.SkillExecute.BeginExecute();
+            await self.SkillExecute.WaitEntityDestroy();
         }
 
        
