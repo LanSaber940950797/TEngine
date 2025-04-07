@@ -24,6 +24,8 @@ namespace GameLogic
         public static void InitBattle(Scene battle)
         {
             //逻辑层组件
+            battle.AddComponent<BattleTime>();
+            battle.AddComponent<BattleTimerComponent>();
             battle.AddComponent<ActorComponent>();
             
             //显示层组件

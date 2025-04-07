@@ -52,11 +52,11 @@ namespace GameLogic.Battle
         {
             if (self.Timer != 0)
             {
-                self.Root().GetComponent<TimerComponent>()?.Remove(ref self.Timer);
+                self.Scene().GetComponent<BattleTimerComponent>()?.Remove(ref self.Timer);
             }
 
-            self.LastTime = TimeInfo.Instance.ServerFrameTime() + duration;
-            self.Timer = self.Root().GetComponent<TimerComponent>()
+            self.LastTime = BattleHelper.FrameTime() + duration;
+            self.Timer = self.Scene().GetComponent<BattleTimerComponent>()
                 .NewOnceTimer(self.LastTime, TimerInvokeType.BuffDurationTimer, self);
         }
 
@@ -65,8 +65,7 @@ namespace GameLogic.Battle
         {
             if (self.Timer != 0)
             {
-                self.Root().GetComponent<TimerComponent>()?.Remove(ref self.Timer);
-                self.Timer = 0;
+                self.Scene().GetComponent<BattleTimerComponent>()?.Remove(ref self.Timer);
             }
         }
     }

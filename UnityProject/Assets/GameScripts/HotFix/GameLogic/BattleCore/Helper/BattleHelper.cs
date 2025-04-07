@@ -22,6 +22,11 @@ namespace GameLogic.Battle
             return system.TryMakeAction(out action, source);
         }
 
+        public static long FrameTime()
+        {
+            return Scene.GetComponent<BattleTime>().Now();
+        }
+        
         public static Actor CreateActor(ActorType actorType, SideType sideType, Entity info = null)
         {
             if (TryMakeAction<CreateActorAction>(out var action))

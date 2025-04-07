@@ -12,6 +12,9 @@ namespace GameLogic.Battle
     {
         public static BattleWorldType WorldType = BattleWorldType.TwoDimensional;
         public static bool IsStateSync = true;
+       
+        public const int OneSecFrame = 20; //一秒钟跑多少帧
+        public const int FrameInterval = 1000 / OneSecFrame;
     }
 
     // 角色类型
