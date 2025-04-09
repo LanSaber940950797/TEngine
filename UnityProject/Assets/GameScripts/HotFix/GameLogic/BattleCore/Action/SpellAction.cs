@@ -51,7 +51,8 @@ namespace GameLogic.Battle
             if(self.IsDisposed) return; //被打断了
             await self.DoActionInner();
             await self.PostProcess();
-            self.Dispose();
+            //延时销毁，可能有些事件监听需要延时处理该行为，不能立即销毁
+            self.AddChild<DestroyTimer, int, bool>(1000, true, true);
         }
 
         private static async ETTask PreProcess(this SpellAction self)

@@ -46,6 +46,8 @@ namespace GameLogic.Battle
             await self.PreProcess();
             await self.DoActionInner();
             await self.PostProcess();
+            //延时销毁，可能有些事件监听需要延时处理该行为，不能立即销毁
+            self.AddChild<DestroyTimer, int, bool>(1000, true, true);
         }
         
         private static async ETTask PreProcess(this AddBuffAction self)

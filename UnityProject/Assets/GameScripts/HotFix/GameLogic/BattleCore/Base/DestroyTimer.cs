@@ -4,21 +4,22 @@ using ET;
 namespace GameLogic.Battle
 {
     [ComponentOf]
-    public class BuffDurationTimer : Entity,IAwake<int>,IDestroy
+    public class DestroyTimer : Entity,IAwake<int, bool>,IDestroy
     {
         public long Timer;
         public long LastTime;
+        public bool IsDestroyParent;
     }
     
     
     
-    [EntitySystemOf(typeof(BuffDurationTimer))]
-    public static partial class BuffDurationTimerSystem
+    [EntitySystemOf(typeof(DestroyTimer))]
+    public static partial class DestroyTimerSystem
     {
-        [Invoke(TimerInvokeType.BuffDurationTimer)]
-        public class BuffDurationTimerHandle: ATimer<BuffDurationTimer>
+        [Invoke(TimerInvokeType.DestroyTimer)]
+        public class DestroyTimerHandle: ATimer<DestroyTimer>
         {
-            protected override void Run(BuffDurationTimer self)
+            protected override void Run(DestroyTimer self)
             {
                 if (self.IsDisposed)
                 {
@@ -26,17 +27,24 @@ namespace GameLogic.Battle
                 }
                 self.Timer = 0;
                 self.LastTime = 0;
-                self.GetParent<Buff>().OnDurationTimer();
+                if (self.IsDestroyParent)
+                {
+                    self.Parent.Dispose();
+                }
+                else
+                {
+                    self.Dispose();
+                }
             }
         }
         
         [EntitySystem]
-        private static void Awake(this BuffDurationTimer self, int duration)
+        private static void Awake(this DestroyTimer self, int duration, bool isParent)
         {
             self.ReSet(duration);
         }
 
-        public static void AddDuration(this BuffDurationTimer self, int duration)
+        public static void AddDuration(this DestroyTimer self, int duration)
         {
             if (self.Timer == 0)
             {
@@ -52,7 +60,7 @@ namespace GameLogic.Battle
             self.ReSet(duration + (int)sub);
         }
 
-        public static void ReSet(this BuffDurationTimer self, int duration)
+        public static void ReSet(this DestroyTimer self, int duration)
         {
             if (self.Timer != 0)
             {
@@ -61,11 +69,11 @@ namespace GameLogic.Battle
 
             self.LastTime = BattleHelper.FrameTime() + duration;
             self.Timer = self.Scene().GetComponent<BattleTimerComponent>()
-                .NewOnceTimer(self.LastTime, TimerInvokeType.BuffDurationTimer, self);
+                .NewOnceTimer(self.LastTime, TimerInvokeType.DestroyTimer, self);
         }
 
         [EntitySystem]
-        private static void Destroy(this BuffDurationTimer self)
+        private static void Destroy(this DestroyTimer self)
         {
             if (self.Timer != 0)
             {

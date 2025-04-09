@@ -15,6 +15,7 @@
         public const int SessionAcceptTimeout = 203;
         public const int BuffDurationTimer = 204;
         public const int BattleFrameTime = 205;
+        public const int DestroyTimer = 206;
         public const int RoomUpdate = 301;
     }
 }

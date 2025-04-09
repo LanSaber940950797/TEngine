@@ -3,6 +3,8 @@ using ET;
 
 namespace GameLogic.Battle
 {
+    //战斗时间管理器
+    
     [ComponentOf(typeof(Scene))]
     public class BattleTime : Entity,IAwake,IDestroy
     {
@@ -19,6 +21,10 @@ namespace GameLogic.Battle
         {
             protected override void Run(BattleTime self)
             {
+                if (self.IsDisposed)
+                {
+                    return;
+                }
                 try
                 {
                     self.FixUpdate();

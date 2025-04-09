@@ -3,7 +3,8 @@ using ET;
 
 namespace GameLogic.Battle
 {
-
+    //战斗时间定时器，逻辑都是抄timer的，但战斗时间需要自主管理
+    //比如暂停&加速逻辑，更高级的时停技能都需要暂停战斗
 
     [EntitySystemOf(typeof(BattleTimerComponent))]
     public static partial class BattleTimerComponentSystem
