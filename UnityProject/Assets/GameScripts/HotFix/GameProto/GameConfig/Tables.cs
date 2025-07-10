@@ -15,6 +15,24 @@ public partial class Tables
 {
     #region The Tables
 
+    private item.TbItem m_TbItem;
+    public item.TbItem TbItem 
+    {
+        get
+        {
+            if (m_TbItem == null)
+            {
+                m_TbItem = new item.TbItem(defaultLoader("item_tbitem"));
+                m_TbItem.ResolveRef(this);
+            }
+            return m_TbItem;
+        }
+        set
+        {
+            m_TbItem = value;
+            m_TbItem.ResolveRef(this);
+        }
+    }
     private TbSpell m_TbSpell;
     public TbSpell TbSpell 
     {
@@ -67,6 +85,168 @@ public partial class Tables
         {
             m_TbBuff = value;
             m_TbBuff.ResolveRef(this);
+        }
+    }
+    private TbHeroDesc m_TbHeroDesc;
+    public TbHeroDesc TbHeroDesc 
+    {
+        get
+        {
+            if (m_TbHeroDesc == null)
+            {
+                m_TbHeroDesc = new TbHeroDesc(defaultLoader("tbherodesc"));
+                m_TbHeroDesc.ResolveRef(this);
+            }
+            return m_TbHeroDesc;
+        }
+        set
+        {
+            m_TbHeroDesc = value;
+            m_TbHeroDesc.ResolveRef(this);
+        }
+    }
+    private TbMainlandActorShow m_TbMainlandActorShow;
+    public TbMainlandActorShow TbMainlandActorShow 
+    {
+        get
+        {
+            if (m_TbMainlandActorShow == null)
+            {
+                m_TbMainlandActorShow = new TbMainlandActorShow(defaultLoader("tbmainlandactorshow"));
+                m_TbMainlandActorShow.ResolveRef(this);
+            }
+            return m_TbMainlandActorShow;
+        }
+        set
+        {
+            m_TbMainlandActorShow = value;
+            m_TbMainlandActorShow.ResolveRef(this);
+        }
+    }
+    private TbMonsterFeatureDesc m_TbMonsterFeatureDesc;
+    public TbMonsterFeatureDesc TbMonsterFeatureDesc 
+    {
+        get
+        {
+            if (m_TbMonsterFeatureDesc == null)
+            {
+                m_TbMonsterFeatureDesc = new TbMonsterFeatureDesc(defaultLoader("tbmonsterfeaturedesc"));
+                m_TbMonsterFeatureDesc.ResolveRef(this);
+            }
+            return m_TbMonsterFeatureDesc;
+        }
+        set
+        {
+            m_TbMonsterFeatureDesc = value;
+            m_TbMonsterFeatureDesc.ResolveRef(this);
+        }
+    }
+    private TbMonsterDesc m_TbMonsterDesc;
+    public TbMonsterDesc TbMonsterDesc 
+    {
+        get
+        {
+            if (m_TbMonsterDesc == null)
+            {
+                m_TbMonsterDesc = new TbMonsterDesc(defaultLoader("tbmonsterdesc"));
+                m_TbMonsterDesc.ResolveRef(this);
+            }
+            return m_TbMonsterDesc;
+        }
+        set
+        {
+            m_TbMonsterDesc = value;
+            m_TbMonsterDesc.ResolveRef(this);
+        }
+    }
+    private TbCommonConstant m_TbCommonConstant;
+    public TbCommonConstant TbCommonConstant 
+    {
+        get
+        {
+            if (m_TbCommonConstant == null)
+            {
+                m_TbCommonConstant = new TbCommonConstant(defaultLoader("tbcommonconstant"));
+                m_TbCommonConstant.ResolveRef(this);
+            }
+            return m_TbCommonConstant;
+        }
+        set
+        {
+            m_TbCommonConstant = value;
+            m_TbCommonConstant.ResolveRef(this);
+        }
+    }
+    private TbFetterDesc m_TbFetterDesc;
+    public TbFetterDesc TbFetterDesc 
+    {
+        get
+        {
+            if (m_TbFetterDesc == null)
+            {
+                m_TbFetterDesc = new TbFetterDesc(defaultLoader("tbfetterdesc"));
+                m_TbFetterDesc.ResolveRef(this);
+            }
+            return m_TbFetterDesc;
+        }
+        set
+        {
+            m_TbFetterDesc = value;
+            m_TbFetterDesc.ResolveRef(this);
+        }
+    }
+    private TbMainlandDesc m_TbMainlandDesc;
+    public TbMainlandDesc TbMainlandDesc 
+    {
+        get
+        {
+            if (m_TbMainlandDesc == null)
+            {
+                m_TbMainlandDesc = new TbMainlandDesc(defaultLoader("tbmainlanddesc"));
+                m_TbMainlandDesc.ResolveRef(this);
+            }
+            return m_TbMainlandDesc;
+        }
+        set
+        {
+            m_TbMainlandDesc = value;
+            m_TbMainlandDesc.ResolveRef(this);
+        }
+    }
+    private TbMonsterGroupDesc m_TbMonsterGroupDesc;
+    public TbMonsterGroupDesc TbMonsterGroupDesc 
+    {
+        get
+        {
+            if (m_TbMonsterGroupDesc == null)
+            {
+                m_TbMonsterGroupDesc = new TbMonsterGroupDesc(defaultLoader("tbmonstergroupdesc"));
+                m_TbMonsterGroupDesc.ResolveRef(this);
+            }
+            return m_TbMonsterGroupDesc;
+        }
+        set
+        {
+            m_TbMonsterGroupDesc = value;
+            m_TbMonsterGroupDesc.ResolveRef(this);
+        }
+    }
+    private TbCardDesc m_TbCardDesc;
+    public TbCardDesc TbCardDesc 
+    {
+        get
+        {
+            if (m_TbCardDesc == null)
+            {
+                m_TbCardDesc = new TbCardDesc(defaultLoader("tbcarddesc"));
+                m_TbCardDesc.ResolveRef(this);
+            }
+            return m_TbCardDesc;
+        }
+        set
+        {
+            m_TbCardDesc = value;
+            m_TbCardDesc.ResolveRef(this);
         }
     }
 

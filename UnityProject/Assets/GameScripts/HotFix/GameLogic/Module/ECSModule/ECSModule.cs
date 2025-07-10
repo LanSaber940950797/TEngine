@@ -26,7 +26,7 @@ namespace GameLogic
 
         protected override void OnInit()
         {
-            //StartAsync().NoContext();
+            StartAsync().NoContext();
         }
         
         

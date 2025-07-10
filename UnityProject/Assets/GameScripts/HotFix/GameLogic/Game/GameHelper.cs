@@ -6,21 +6,22 @@ namespace GameLogic
 {
     public static class GameHelper
     {
-        //public static Scene WorldScene => GameModule.ECS.Root.GetComponent<CurrentScenesComponent>().Scene;
+        public static GameWorld WorldScene => GameModule.ECS.Root.GetComponent<GameWorld>();
         public static Scene CurrentScene => GameModule.ECS.Root.GetComponent<CurrentScenesComponent>().Scene;
-        
+        public static Scene Battle => GameModule.ECS.Root.GetComponent<CurrentScenesComponent>().Scene;
        
         
         
         
         public static async ETTask StartGame()
         {
-            var battle = CurrentSceneFactory.Create(IdGenerater.Instance.GenerateId(),IdGenerater.Instance.GenerateInstanceId()
-                , SceneType.Battle,"战斗");
-            InitBattle(battle);
+            var world = GameModule.ECS.Root.AddComponent<GameWorld>();
+            
             await ETTask.CompletedTask;
         }
-
+        
+        
+        
         public static void InitBattle(Scene battle)
         {
             //逻辑层组件
